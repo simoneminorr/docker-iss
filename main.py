@@ -19,7 +19,7 @@ from pymongo import MongoClient
 
 # logging config
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+logr = logging.getLogger(__name__)
 
 # core fcn
 def get_iss_location():
@@ -39,15 +39,15 @@ def get_iss_location():
         lat = r['iss_position']['latitude']
 
         # log output for visibility
-        logger.info("Timestamp: " + dtime)
-        logger.info("Longitude: " + long)
-        logger.info("Latitude: " + lat)
+        logr.info("Timestamp: " + dtime)
+        logr.info("Longitude: " + long)
+        logr.info("Latitude: " + lat)
 
         # write output to mongo db
         write_to_mongo(dtime, long, lat)
 
     except Exception as e:
-        logger.error(e)
+        logr.error(e)
         exit(1)
 
 # db utility fcn
@@ -68,9 +68,9 @@ def write_to_mongo(dtime, long, lat):
         db = client['mst3k']
         collection = db['locations']
         collection.insert_one({'timestamp': dtime, 'longitude': long, 'latitude': lat})
-        logger.info('Output written to MongoDB')
+        logr.info('Output written to MongoDB')
     except Exception as e:
-        logger.error(e)
+        logr.error(e)
         exit(1)
 
 # entrypoint fcn
